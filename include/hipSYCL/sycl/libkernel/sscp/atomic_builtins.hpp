@@ -80,7 +80,7 @@ HIPSYCL_BUILTIN T __hipsycl_atomic_fetch_xor(T *addr, T x, memory_order order,
 
 template <access::address_space S, class T>
 HIPSYCL_BUILTIN T __hipsycl_atomic_fetch_add(T *addr, T x, memory_order order,
-                                             memory_scope scope) noexcept {return x;}
+                                             memory_scope scope);// noexcept {return x;}
 
 template <access::address_space S, class T>
 HIPSYCL_BUILTIN T __hipsycl_atomic_fetch_sub(T *addr, T x, memory_order order,
