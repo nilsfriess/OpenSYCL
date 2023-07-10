@@ -38,6 +38,12 @@
 #include "hipSYCL/sycl/libkernel/sscp/builtins/half.hpp"
 #endif
 
+#include "detail/bit_cast.hpp"
+#ifdef HIPSYCL_HAS_CONSTEXPR_BITCAST
+#define HIPSYCL_CONSTEXPR constexpr
+#else
+#define HIPSYCL_CONSTEXPR
+#endif
 
 namespace hipsycl {
 namespace sycl {
@@ -57,14 +63,14 @@ private:
 public:
   constexpr half() : _data{} {};
   
-  half(float f) noexcept
+  HIPSYCL_CONSTEXPR half(float f) noexcept
   : _data{fp16::create(f)} {}
 
-  half(const half&) = default;
+  HIPSYCL_CONSTEXPR half(const half&) = default;
 
   half& operator=(const half&) noexcept = default;
 
-  operator float() const {
+  HIPSYCL_CONSTEXPR operator float() const {
     return fp16::promote_to_float(_data);
   }
 
@@ -311,5 +317,7 @@ namespace std {
     }
   };
 }
+
+#undef HIPSYCL_CONSTEXPR
 
 #endif

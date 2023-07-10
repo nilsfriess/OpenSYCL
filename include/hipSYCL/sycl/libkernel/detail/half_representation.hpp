@@ -99,56 +99,56 @@ inline __half int_to_cuda_half(__hipsycl_uint16 x) noexcept {
 
 
 
-inline half_storage truncate_from(float f) noexcept {
+constexpr half_storage truncate_from(float f) noexcept {
   return hipsycl::fp16::fp16_ieee_from_fp32_value(f);
 }
 
-inline half_storage truncate_from(double f) noexcept {
+constexpr half_storage truncate_from(double f) noexcept {
   return truncate_from(static_cast<float>(f));
 }
 
-inline float promote_to_float(half_storage h) noexcept {
+constexpr float promote_to_float(half_storage h) noexcept {
   return hipsycl::fp16::fp16_ieee_to_fp32_value(h);
 }
 
-inline double promote_to_double(half_storage h) noexcept {
+constexpr double promote_to_double(half_storage h) noexcept {
   return static_cast<double>(promote_to_float(h));
 }
 
-inline half_storage create(float f) noexcept {
+constexpr half_storage create(float f) noexcept {
   return truncate_from(f);
 }
 
-inline half_storage create(double f) noexcept {
+constexpr half_storage create(double f) noexcept {
   return truncate_from(f);
 }
 
-inline half_storage create(__hipsycl_uint16 i) noexcept {
+constexpr half_storage create(__hipsycl_uint16 i) noexcept {
   return i;
 }
 
 #ifdef HIPSYCL_HALF_HAS_FLOAT16_TYPE
-inline half_storage create(_Float16 f) noexcept {
+constexpr half_storage create(_Float16 f) noexcept {
   return detail::native_float16_to_int(f);
 }
 
-inline _Float16 as_native_float16(half_storage h) noexcept {
+constexpr _Float16 as_native_float16(half_storage h) noexcept {
   return detail::int_to_native_float16(h);
 }
 #endif
 
 #ifdef HIPSYCL_HALF_HAS_CUDA_HALF_TYPE
 
-inline half_storage create(__half h) noexcept {
+constexpr half_storage create(__half h) noexcept {
   return detail::cuda_half_to_int(h);
 }
 
-inline __half as_cuda_half(half_storage h) noexcept {
+constexpr __half as_cuda_half(half_storage h) noexcept {
   return detail::int_to_cuda_half(h);
 }
 #endif
 
-inline __hipsycl_uint16 as_integer(half_storage h) noexcept {
+constexpr __hipsycl_uint16 as_integer(half_storage h) noexcept {
   return h;
 }
 
@@ -159,7 +159,7 @@ using native_t = unsigned short;
 #endif
 
 // Provide basic "builtin" arithmetic functions that rely on only the compiler.
-inline half_storage builtin_add(half_storage a, half_storage b) noexcept {
+constexpr half_storage builtin_add(half_storage a, half_storage b) noexcept {
 #ifdef HIPSYCL_HALF_HAS_FLOAT16_TYPE
   return create(as_native_float16(a) + as_native_float16(b));
 #else

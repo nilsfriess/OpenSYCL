@@ -8,6 +8,14 @@
 #include "bitcasts.h"
 #include "hipSYCL/sycl/libkernel/detail/int_types.hpp"
 
+#include "hipSYCL/sycl/libkernel/detail/bit_cast.hpp"
+#ifdef HIPSYCL_HAS_CONSTEXPR_BITCAST
+#define HIPSYCL_CONSTEXPR constexpr
+#else
+#define HIPSYCL_CONSTEXPR static inline
+#endif
+
+
 #define HIPSYCL_INT32_C(n) __hipsycl_int32{n}
 #define HIPSYCL_UINT32_C(n) __hipsycl_uint32{n}
 #define HIPSYCL_UINT16_C(n) __hipsycl_uint16{n}
@@ -15,7 +23,7 @@
 namespace hipsycl::fp16 {
 
 template<class T>
-T fabs(T x) {
+constexpr T fabs(T x) {
   return (x < T{0}) ? -x : x;
 }
 
@@ -25,7 +33,7 @@ T fabs(T x) {
  *
  * @note The implementation doesn't use any floating-point operations.
  */
-static inline __hipsycl_uint32 fp16_ieee_to_fp32_bits(__hipsycl_uint16 h) {
+constexpr __hipsycl_uint32 fp16_ieee_to_fp32_bits(__hipsycl_uint16 h) {
 	/*
 	 * Extend the half-precision floating-point number to 32 bits and shift to the upper part of the 32-bit word:
 	 *      +---+-----+------------+-------------------+
@@ -107,7 +115,7 @@ static inline __hipsycl_uint32 fp16_ieee_to_fp32_bits(__hipsycl_uint16 h) {
  * @note The implementation relies on IEEE-like (no assumption about rounding mode and no operations on denormals)
  * floating-point operations and bitcasts between integer and floating-point variables.
  */
-static inline float fp16_ieee_to_fp32_value(__hipsycl_uint16 h) {
+HIPSYCL_CONSTEXPR float fp16_ieee_to_fp32_value(__hipsycl_uint16 h) {
 	/*
 	 * Extend the half-precision floating-point number to 32 bits and shift to the upper part of the 32-bit word:
 	 *      +---+-----+------------+-------------------+
@@ -222,7 +230,7 @@ static inline float fp16_ieee_to_fp32_value(__hipsycl_uint16 h) {
  * @note The implementation relies on IEEE-like (no assumption about rounding mode and no operations on denormals)
  * floating-point operations and bitcasts between integer and floating-point variables.
  */
-static inline __hipsycl_uint16 fp16_ieee_from_fp32_value(float f) {
+HIPSYCL_CONSTEXPR __hipsycl_uint16 fp16_ieee_from_fp32_value(float f) {
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L) || defined(__GNUC__) && !defined(__STRICT_ANSI__)
 	const float scale_to_inf = 0x1.0p+112f;
 	const float scale_to_zero = 0x1.0p-110f;
@@ -254,7 +262,7 @@ static inline __hipsycl_uint16 fp16_ieee_from_fp32_value(float f) {
  *
  * @note The implementation doesn't use any floating-point operations.
  */
-static inline __hipsycl_uint32 fp16_alt_to_fp32_bits(__hipsycl_uint16 h) {
+constexpr __hipsycl_uint32 fp16_alt_to_fp32_bits(__hipsycl_uint16 h) {
 	/*
 	 * Extend the half-precision floating-point number to 32 bits and shift to the upper part of the 32-bit word:
 	 *      +---+-----+------------+-------------------+
@@ -327,7 +335,7 @@ static inline __hipsycl_uint32 fp16_alt_to_fp32_bits(__hipsycl_uint16 h) {
  * @note The implementation relies on IEEE-like (no assumption about rounding mode and no operations on denormals)
  * floating-point operations and bitcasts between integer and floating-point variables.
  */
-static inline float fp16_alt_to_fp32_value(__hipsycl_uint16 h) {
+constexpr float fp16_alt_to_fp32_value(__hipsycl_uint16 h) {
 	/*
 	 * Extend the half-precision floating-point number to 32 bits and shift to the upper part of the 32-bit word:
 	 *      +---+-----+------------+-------------------+
@@ -429,7 +437,7 @@ static inline float fp16_alt_to_fp32_value(__hipsycl_uint16 h) {
  * @note The implementation relies on IEEE-like (no assumption about rounding mode and no operations on denormals)
  * floating-point operations and bitcasts between integer and floating-point variables.
  */
-static inline __hipsycl_uint16 fp16_alt_from_fp32_value(float f) {
+constexpr __hipsycl_uint16 fp16_alt_from_fp32_value(float f) {
 	const __hipsycl_uint32 w = fp32_to_bits(f);
 	const __hipsycl_uint32 sign = w & HIPSYCL_UINT32_C(0x80000000);
 	const __hipsycl_uint32 shl1_w = w + w;
