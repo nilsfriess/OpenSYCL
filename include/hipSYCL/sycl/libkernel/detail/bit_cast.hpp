@@ -29,13 +29,20 @@
 #ifndef HIPSYCL_BIT_CAST_DETAIL_HPP
 #define HIPSYCL_BIT_CAST_DETAIL_HPP
 
-#if __has_builtin(__builtin_bit_cast)
+#if defined(__cpp_lib_bit_cast) || __has_builtin(__builtin_bit_cast)
+#define HIPSYCL_HAS_CONSTEXPR_BITCAST
+#endif
 
+#if defined(__cpp_lib_bit_cast)
+#include <bit>
+#define HIPSYCL_INPLACE_BIT_CAST(Tin, Tout, in, out)                           \
+  out = std::bit_cast<Tout>(in)
+
+#elif __has_builtin(__builtin_bit_cast)
 #define HIPSYCL_INPLACE_BIT_CAST(Tin, Tout, in, out)                           \
   out = __builtin_bit_cast(Tout, in)
 
 #else
-
 #define HIPSYCL_INPLACE_BIT_CAST(Tin, Tout, in, out)                           \
   {                                                                            \
     union {                                                                    \
@@ -46,7 +53,5 @@
     out = u.union_out;                                                         \
   }
 #endif
-
-
 
 #endif
