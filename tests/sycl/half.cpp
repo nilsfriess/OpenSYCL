@@ -170,4 +170,23 @@ BOOST_AUTO_TEST_CASE(half_unary_operators){
   }
 }
 
+#ifdef HIPSYCL_HAS_CONSTEXPR_BITCAST
+BOOST_AUTO_TEST_CASE(half_constexpr_constructors) {
+  namespace s = cl::sycl;
+
+  constexpr s::half h1;
+  constexpr s::half h2{1};
+
+  constexpr s::half h3{h2};
+
+  constexpr float f1 = h1;
+  constexpr float f2 = h2;
+  constexpr float f3 = h3;
+
+  BOOST_CHECK(h1 == s::half(f1));
+  BOOST_CHECK(h2 == s::half(f2));
+  BOOST_CHECK(h3 == s::half(f3));
+}
+#endif
+
 BOOST_AUTO_TEST_SUITE_END()    
