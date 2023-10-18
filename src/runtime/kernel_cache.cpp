@@ -193,8 +193,9 @@ bool hcf_image_info::is_valid() const {
   return _parsing_successful;
 }
 
-kernel_cache& kernel_cache::get() {
-  static kernel_cache c;
+std::shared_ptr<kernel_cache> kernel_cache::get() {
+  struct make_shared_enabler : public kernel_cache {}; // expose private constructor
+  static auto c = std::make_shared<make_shared_enabler>();
   return c;
 }
 

@@ -87,7 +87,7 @@ backend_manager::backend_manager()
 
 backend_manager::~backend_manager()
 {
-  kernel_cache::get().unload();
+  kernel_cache::get()->unload();
 }
 
 backend *backend_manager::get(backend_id id) const {

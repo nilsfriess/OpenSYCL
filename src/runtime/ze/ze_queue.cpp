@@ -440,7 +440,7 @@ result ze_queue::submit_multipass_kernel_from_code_object(
 
   std::string global_kernel_name = op.get_global_kernel_name();
   const kernel_cache::kernel_name_index_t* kidx =
-      kernel_cache::get().get_global_kernel_index(global_kernel_name);
+      kernel_cache::get()->get_global_kernel_index(global_kernel_name);
 
   if(!kidx) {
     return make_error(
@@ -497,7 +497,7 @@ result ze_queue::submit_multipass_kernel_from_code_object(
     return exec_obj;
   };
 
-  const code_object *obj = kernel_cache::get().get_or_construct_code_object(
+  const code_object *obj = kernel_cache::get()->get_or_construct_code_object(
       *kidx, backend_kernel_name, backend_id::level_zero, hcf_object,
       code_object_selector, code_object_constructor);
 
@@ -541,7 +541,7 @@ result ze_queue::submit_sscp_kernel_from_code_object(
 
   std::string global_kernel_name = op.get_global_kernel_name();
   const kernel_cache::kernel_name_index_t* kidx =
-      kernel_cache::get().get_global_kernel_index(global_kernel_name);
+      kernel_cache::get()->get_global_kernel_index(global_kernel_name);
 
   if(!kidx) {
     return make_error(
@@ -625,7 +625,7 @@ result ze_queue::submit_sscp_kernel_from_code_object(
     return exec_obj;
   };
 
-  const code_object *obj = kernel_cache::get().get_or_construct_code_object(
+  const code_object *obj = kernel_cache::get()->get_or_construct_code_object(
       *kidx, kernel_name, backend_id::level_zero, hcf_object,
       code_object_selector, code_object_constructor);
 

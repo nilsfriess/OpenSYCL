@@ -220,7 +220,7 @@ public:
   using code_object_index_t = std::size_t;
   using kernel_name_index_t = std::size_t;
 
-  static kernel_cache& get();
+  static std::shared_ptr<kernel_cache> get();
 
   const kernel_name_index_t*
   get_global_kernel_index(const std::string &kernel_name) const;
@@ -447,7 +447,7 @@ namespace detail {
 
 template<class T>
 struct kernel_registrator {
-  kernel_registrator() { kernel_cache::get().register_kernel<T>(); }
+  kernel_registrator() { kernel_cache::get()->register_kernel<T>(); }
 };
 
 template<class KernelT>
