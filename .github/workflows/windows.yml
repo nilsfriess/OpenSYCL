@@ -45,6 +45,7 @@ jobs:
         cd $env:GITHUB_WORKSPACE
         Invoke-WebRequest -o llvm.7z "https://www.dropbox.com/scl/fi/otgm61nk0j7wfzxvlptvz/llvm-17-windows-prebuilt.7z?rlkey=u3npkfe1rcef6vd7nway9t92p&dl=1"
         7z.exe x llvm.7z
+        mv .\llvm-17-windows-prebuilt\ llvm
         
     - name: Build boost from source
       if: steps.cache-boost.outputs.cache-hit != 'true'
