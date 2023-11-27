@@ -60,11 +60,11 @@ jobs:
         cmake "$env:GITHUB_WORKSPACE/tests" -G Ninja -DCMAKE_C_COMPILER="clang.exe" -DCMAKE_CXX_COMPILER="clang++.exe" -DACPP_TARGETS="omp" -DAdaptiveCpp_DIR="$env:GITHUB_WORKSPACE/build/core/install/lib/cmake/AdaptiveCpp" -DBoost_ROOT="$env:GITHUB_WORKSPACE/boost/boost_1_81_0" -DCMAKE_BUILD_TYPE=Release
         ninja -j2
 
-    # - name: run CPU tests
-    #   shell: cmd
-    #   run: |
-    #     set PATH=%GITHUB_WORKSPACE%\build\core\install\bin;%PATH%
-    #     set GITHUB_WORKSPACE=%GITHUB_WORKSPACE:\=/%
-    #     cd "%GITHUB_WORKSPACE%/build/tests-cpu"
-    #     sycl_tests.exe
+    - name: run CPU tests
+      shell: cmd
+      run: |
+        set PATH=%GITHUB_WORKSPACE%\build\core\install\bin;%PATH%
+        set GITHUB_WORKSPACE=%GITHUB_WORKSPACE:\=/%
+        cd "%GITHUB_WORKSPACE%/build/tests-cpu"
+        sycl_tests.exe
         
