@@ -5,7 +5,6 @@ set(Boost_USE_STATIC_LIBS off)
 set(BUILD_SHARED_LIBS on)
 set(REDUCED_LOCAL_MEM_USAGE OFF CACHE BOOL "Only run tests with reduced local memory usage to allow running on hardware with little local memory.")
 
-set(Boost_DEBUG ON)
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
 find_package(AdaptiveCpp REQUIRED)
