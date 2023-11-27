@@ -38,14 +38,14 @@ jobs:
         Expand-Archive -Path ninja.zip -DestinationPath "$env:GITHUB_WORKSPACE/ninja_install"
         echo "$env:GITHUB_WORKSPACE/ninja_install" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
         
-    - name: Download prebuilt LLVM 17
-      if: steps.cache-llvm17.outputs.cache-hit != 'true' && matrix.clang == 17
-      shell: powershell
-      run: |
-        cd $env:GITHUB_WORKSPACE
-        Invoke-WebRequest -o llvm.7z "https://www.dropbox.com/scl/fi/otgm61nk0j7wfzxvlptvz/llvm-17-windows-prebuilt.7z?rlkey=u3npkfe1rcef6vd7nway9t92p&dl=1"
-        7z.exe x llvm.7z
-        mv .\llvm-17-windows-prebuilt\ llvm
+    # - name: Download prebuilt LLVM 17
+    #   if: steps.cache-llvm17.outputs.cache-hit != 'true' && matrix.clang == 17
+    #   shell: powershell
+    #   run: |
+    #     cd $env:GITHUB_WORKSPACE
+    #     Invoke-WebRequest -o llvm.7z "https://www.dropbox.com/scl/fi/otgm61nk0j7wfzxvlptvz/llvm-17-windows-prebuilt.7z?rlkey=u3npkfe1rcef6vd7nway9t92p&dl=1"
+    #     7z.exe x llvm.7z
+    #     mv .\llvm-17-windows-prebuilt\ llvm
         
     - name: Build boost from source
       if: steps.cache-boost.outputs.cache-hit != 'true'
@@ -65,10 +65,10 @@ jobs:
       if: matrix.clang == 17
       shell: powershell
       run: |
-        $env:PATH = "$env:GITHUB_WORKSPACE/llvm/bin;$env:PATH"
+        #$env:PATH = "$env:GITHUB_WORKSPACE/llvm/bin;$env:PATH"
         mkdir $env:GITHUB_WORKSPACE/build/core
         cd $env:GITHUB_WORKSPACE/build/core
-        cmake "$env:GITHUB_WORKSPACE" -G Ninja -DCMAKE_C_COMPILER="clang.exe" -DCMAKE_CXX_COMPILER="clang++.exe" -DCMAKE_INSTALL_PREFIX=".\install" -DBoost_ROOT="$env:GITHUB_WORKSPACE/boost/boost_1_81_0" -DWITH_CUDA_BACKEND=OFF -DLLVM_DIR="$env:GITHUB_WORKSPACE/llvm/lib/cmake/llvm" -DCMAKE_BUILD_TYPE=Release
+        cmake "$env:GITHUB_WORKSPACE" -G Ninja -DCMAKE_C_COMPILER="clang.exe" -DCMAKE_CXX_COMPILER="clang++.exe" -DCMAKE_INSTALL_PREFIX=".\install" -DBoost_ROOT="$env:GITHUB_WORKSPACE/boost/boost_1_81_0" -DWITH_CUDA_BACKEND=OFF -DCMAKE_BUILD_TYPE=Release
         ninja -j2 install
 
     - name: build CPU tests
