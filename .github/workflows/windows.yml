@@ -52,13 +52,13 @@ jobs:
         cmake "$env:GITHUB_WORKSPACE" -G Ninja -DCMAKE_C_COMPILER="clang.exe" -DCMAKE_CXX_COMPILER="clang++.exe" -DCMAKE_INSTALL_PREFIX=".\install" -DBoost_ROOT="$env:GITHUB_WORKSPACE/boost/boost_1_81_0" -DWITH_CUDA_BACKEND=OFF -DCMAKE_BUILD_TYPE=Release
         ninja -j2 install
 
-    # - name: build CPU tests
-    #   shell: powershell
-    #   run: |
-    #     mkdir $env:GITHUB_WORKSPACE/build/tests-cpu
-    #     cd $env:GITHUB_WORKSPACE/build/tests-cpu
-    #     cmake "$env:GITHUB_WORKSPACE/tests" -G Ninja -DACPP_TARGETS="omp" -DAdaptiveCpp_DIR="$env:GITHUB_WORKSPACE/build/core/install/lib/cmake/AdaptiveCpp" -DBoost_ROOT="$env:GITHUB_WORKSPACE/boost/boost_1_81_0" -DCMAKE_BUILD_TYPE=Release
-    #     ninja -j2
+    - name: build CPU tests
+      shell: powershell
+      run: |
+        md -Force $env:GITHUB_WORKSPACE/build/tests-cpu
+        cd $env:GITHUB_WORKSPACE/build/tests-cpu
+        cmake "$env:GITHUB_WORKSPACE/tests" -G Ninja -DACPP_TARGETS="omp" -DAdaptiveCpp_DIR="$env:GITHUB_WORKSPACE/build/core/install/lib/cmake/AdaptiveCpp" -DBoost_ROOT="$env:GITHUB_WORKSPACE/boost/boost_1_81_0" -DCMAKE_BUILD_TYPE=Release
+        ninja -j2
 
     # - name: run CPU tests
     #   shell: cmd
