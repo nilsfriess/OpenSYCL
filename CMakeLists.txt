@@ -7,7 +7,9 @@ endif()
 set(ACPP_VERSION_MAJOR 23)
 set(ACPP_VERSION_MINOR 10)
 set(ACPP_VERSION_PATCH 0)
-if(NOT ACPP_VERSION_SUFFIX)
+
+set(GIT_DIR "${CMAKE_SOURCE_DIR}/.git")
+if(EXISTS ${GIT_DIR} AND NOT ACPP_VERSION_SUFFIX)
   # Get the latest abbreviated commit hash of the working branch
   execute_process(
     COMMAND git log -1 --format=%h
@@ -53,6 +55,10 @@ if(NOT ACPP_VERSION_SUFFIX)
   
     set(ACPP_VERSION_SUFFIX "+git.${ACPP_GIT_COMMIT_HASH}.${ACPP_GIT_DATE}.branch.${ACPP_GIT_BRANCH}${DIRTY_STR}")
   endif()
+endif()
+
+if(NOT ACPP_VERSION_SUFFIX)
+   set(ACPP_VERSION_SUFFIX "+nogit")
 endif()
 
 project(hipSYCL VERSION ${ACPP_VERSION_MAJOR}.${ACPP_VERSION_MINOR}.${ACPP_VERSION_PATCH})
