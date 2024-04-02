@@ -486,6 +486,8 @@ public:
     : buffer(bufferRange, propList)
   { _alloc = allocator; }
 
+  template <typename t = T,
+	    std::enable_if_t<!std::is_const_v<t>, bool> = true>
   buffer(T *hostData, const range<dimensions> &bufferRange,
          const property_list &propList = {})
     : detail::property_carrying_object{propList}
@@ -495,9 +497,7 @@ public:
     default_policies dpol;
     dpol.destructor_waits = true;
     dpol.use_external_storage = true;
-
-    if constexpr (not std::is_const_v<T>)
-      dpol.writes_back = true;
+    dpol.writes_back = true;
     
     init_policies_from_properties_or_default(dpol);
 
@@ -509,13 +509,14 @@ public:
     }
   }
 
+  template <typename t = T,
+	    std::enable_if_t<!std::is_const_v<t>, bool> = true>
   buffer(T *hostData, const range<dimensions> &bufferRange,
          AllocatorT allocator, const property_list &propList = {})
       : buffer{hostData, bufferRange, propList} {
     _alloc = allocator;
   }
 
-  template <class t = T, std::enable_if_t<!std::is_const_v<t>, bool> = true>
   buffer(const T *hostData, const range<dimensions> &bufferRange,
          const property_list &propList = {})
       : detail::property_carrying_object{propList} {
@@ -542,7 +543,6 @@ public:
     }
   }
 
-  template <class t = T, std::enable_if_t<!std::is_const_v<t>, bool> = true>
   buffer(const T *hostData, const range<dimensions> &bufferRange,
          AllocatorT allocator, const property_list &propList = {})
     : buffer{hostData, bufferRange, propList}
