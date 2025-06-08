@@ -81,6 +81,7 @@
 #include "jit.hpp"
 #include "pcuda_interop.hpp"
 #include "detail/namespace_compat.hpp"
+#include "span.hpp"
 
 // Support SYCL_EXTERNAL for SSCP - we cannot have SYCL_EXTERNAL if accelerated CPU
 // is active at the same time :(
@@ -96,6 +97,8 @@
   #define SYCL_EXTERNAL
 #endif
 // TODO: Need to investigate to what extent we can support SYCL_EXTERNAL for cuda and hip multipass targets.
+
+using bfloat16 = _Float16;
 
 #endif
 
