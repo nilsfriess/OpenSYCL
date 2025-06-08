@@ -2134,6 +2134,7 @@ if __name__ == '__main__':
     print_warning("syclcc-clang is deprecated; please use acpp instead.")
 
   args = sys.argv[1:]
+  args = [arg for arg in args if not arg.startswith("-fsycl")]
 
   try:
     config = acpp_config(args)
